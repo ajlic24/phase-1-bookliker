@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch(`http://localhost:3000/books`)
     .then(resp => resp.json())
     .then(data => {
-        data.forEach(({title, users, description, img_url}) => {
+        data.forEach(({id, title, users, description, img_url}) => {
             let li = document.createElement(`li`)
             let btn = document.createElement(`button`)
 
@@ -25,13 +25,48 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 img.src = img_url
                 desc.textContent = description
+                userList.id = `user-box`
                 users.forEach((user) => {
                     let userLi = document.createElement(`li`)
                     userLi.textContent = user.username
+                    userLi.id = user.id
                     userList.appendChild(userLi)
                 })
                 btn.addEventListener(`click`, () => {
-
+                    console.log(users)
+                    if (document.getElementById(`10`)) {
+                        fetch(`http://localhost:3000/books/${id}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                users: [
+                                    {id: 8, username: 'maverick'},
+                                ]
+                            })
+                        })
+                        document.getElementById(`10`).remove()
+                    } else {
+                        fetch(`http://localhost:3000/books/${id}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                users: [
+                                    {id: 8, username: 'maverick'},
+                                    {id: 10, username: 'macejkovic'}
+                                ]
+                            })
+                        })
+                        let li = document.createElement(`li`)
+                        li.id = 10
+                        li.textContent = `macejkovic`
+                        document.getElementById(`user-box`).appendChild(li)
+                    }              
                 })
                 divPanel.append(img, desc, userList, btn)
             })
